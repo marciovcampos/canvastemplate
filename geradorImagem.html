@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Gerador Imagem Luciana Marteleto</title>
+  </head>
+  <body id='body' style='margin:40px;'>
+
+    <div id='divTexto'>
+      <label for="">Selecione a cor da imagem:</label>
+      <select id='imagemSelecionada' onchange="gerarCanvas()">
+        <option value="roxo" selected>Roxo</option>
+        <option value="amarelo">Amarelo</option>
+        <option value="azul">Azul</option>
+        <option value="verde">Verde</option>
+        <option value="vermelho">Vermelho</option>
+      </select>
+      <br><br><br>
+      <label for="">Texto para inserir na imagem:</label>
+      <br><br>
+      <textarea id='texto' style='width:80%;font-size:16;padding:2px;' onkeyup="gerarCanvas()" rows="10" placeholder='Texto para inserir na imagem' ></textarea>
+      <br><br>
+      <a id="download" download="imagem.png" href="" onclick="download_img(this);">Download</a>
+    </div>
+    <br><br>
+    <canvas id = "idCanvas" width = "1080" height = "1080" style=''> </canvas>
+
+    <script>
+      document.getElementById('body').onload = function() {
+        gerarCanvas();
+      }
+
+      download_img = function(el) {
+        var canvas = document.getElementById("idCanvas"); 
+        var image = canvas.toDataURL("image/png");
+        el.href = image;
+      }
+
+      gerarCanvas = function() {        
+        var canvas = document.getElementById('idCanvas');
+        var context = canvas.getContext('2d');
+        var x = canvas.width / 2;
+        var y = canvas.height / 2;
+        
+        var imageObj = new Image();
+        imageObj.crossOrigin = "anonymous"; 
+        imageObj.src =  "imagens/" + document.getElementById('imagemSelecionada').value + '.png';
+
+        imageObj.onload = function() {
+          context.drawImage(imageObj, 0, 0, 1080, 1080);
+          context.font = "35px Garamond";
+          context.textAlign = "center";
+          
+          var txt = document.getElementById('texto').value;
+          var lineheight = 35;
+          var lines = txt.split('\n');
+          
+          var eixoY = y - (((lines.length / 2 ) - 1) * lineheight);
+
+          for (var i = 0; i<lines.length; i++)
+            context.fillText(lines[i], x, eixoY	 + (i*lineheight) );
+        };
+
+      };
+
+    </script>
+  </body>
+</html>
