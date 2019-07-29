@@ -11,7 +11,7 @@
         <form>
             <div class="form-group">
               <label for="">Selecione a cor da imagem:</label>
-              <select class="form-control"  id='imagemSelecionada' onchange="gerarCanvas('idCanvas', 400, 13, false, 13)">
+              <select class="form-control"  id='imagemSelecionada' onchange="gerarCanvas('idCanvas', false)">
                 <option value="roxo" selected>Roxo</option>
                 <option value="amarelo">Amarelo</option>
                 <option value="amarelo-orientacao-profissional">Amarelo Orientação Profissional</option>
@@ -22,68 +22,95 @@
                 <option value="vermelho">Vermelho</option>
               </select>
             </div>
+            <div class='row'>
+              <div class="col-md-6 col-sm-12">
+                  <div class="form-group">
+                      <label for="">Tamanho Fonte:</label>
+                      <input class="form-control" type="text" id="tamanhoFonte" value="35" onchange="gerarCanvas('idCanvas', false)">        
+                  </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                  <div class="form-group">
+                      <label for="">Negrito:</label>
+                      <select class="form-control"  id='negrito' onchange="gerarCanvas('idCanvas', false)">
+                          <option value="n" selected>Não</option>
+                          <option value="s">Sim</option>
+                        </select>
+                  </div>
+              </div>
+            </div>
             <div class="form-group">
                 <label for="">Texto para inserir na imagem:</label>
-                <textarea class="form-control" id='texto' style='font-size:16;padding:2px;' onkeyup="gerarCanvas('idCanvas', 400, 13, false, 13)" rows="10" placeholder='Texto para inserir na imagem' ></textarea>        
-            </div>
+                <textarea class="form-control" id='texto' style='font-size:16;padding:2px;' onkeyup="gerarCanvas('idCanvas', false)" rows="10" placeholder='Texto para inserir na imagem' ></textarea>        
+            </div>         
             <div class="form-group text-center">
                 <button class="btn btn-primary" tyle="font-size: 20px;margin-top:20px;margin-bottom:20px;" onclick="iniciarDownload();">Download</button>
-				 <a id="download" download="imagem.png" href="" style="display:none;" onclick="download_img(this);">Download</a>
+				        <a id="download" download="imagem.png" href="" style="display:none;" onclick="download_img(this);">Download</a>
             </div>
             <div class="form-group text-center" style='overflow-x:scroll'>
                 <canvas id = "idCanvas" width = "400" height = "400" > </canvas>
-				<canvas id = "idCanvasDownload" width = "1080" height = "1080" style='visibility:"hidden";'> </canvas>
+				        <canvas id = "idCanvasDownload" width = "1080" height = "1080" style='visibility:"hidden";'> </canvas>
             </div>
         </form>
     </div>
 
     <script>
+      let tamanhoMiniatura = 400;
+      let tamanhoImagem = 1080
+
       document.getElementById('body').onload = function() {
-        gerarCanvas('idCanvas', 400, 13, false, 13);
+          gerarCanvas('idCanvas', false);
       }
 
-	  iniciarDownload = function() {
-		gerarCanvas('idCanvasDownload', 1080, 35, true, 35);
-	  }
-	  
+      iniciarDownload = function() {
+          gerarCanvas('idCanvasDownload', true);
+      }
+      
       download_img = function(el) {
-		var canvas = document.getElementById("idCanvasDownload"); 
-		var image = canvas.toDataURL("image/png");
-		el.href = image;
-		document.getElementById('idCanvasDownload').style.visibility = "hidden";
+          var canvas = document.getElementById("idCanvasDownload"); 
+          var image = canvas.toDataURL("image/png");
+          el.href = image;
+          document.getElementById('idCanvasDownload').style.visibility = "hidden";
       }
 
-      gerarCanvas = function(idCanvas, tamanho, tamanhoLinha, baixar, fonte) {       
-		document.getElementById(idCanvas).style.visibility = "visible"; 
-        var canvas = document.getElementById(idCanvas);
-        var context = canvas.getContext('2d');
-        var x = canvas.width / 2;
-        var y = canvas.height / 2;
-        
-        var imageObj = new Image();
-        imageObj.crossOrigin = "anonymous"; 
-        imageObj.src =  "imagens/" + document.getElementById('imagemSelecionada').value + '.png';
+      gerarCanvas = function(idCanvas, baixar) {   
+          let fonteEscolhida = document.getElementById('tamanhoFonte').value; 
+          if (fonteEscolhida != "") {
+              let tamanho  = baixar ? tamanhoImagem : tamanhoMiniatura;
+              let fonte = baixar ? fonteEscolhida : (fonteEscolhida / (tamanhoImagem / tamanhoMiniatura));
+              let tamanhoLinha = fonte;
 
-        imageObj.onload = function() {
-          context.drawImage(imageObj, 0, 0, tamanho, tamanho);
-          context.font = fonte + "px Garamond";
-          context.textAlign = "center";
-          
-          var txt = document.getElementById('texto').value;
-          var lineheight = tamanhoLinha;
-          var lines = txt.split('\n');
-          
-          var eixoY = y - (((lines.length / 2 ) - 1) * lineheight);
+              document.getElementById(idCanvas).style.visibility = "visible"; 
 
-          for (var i = 0; i<lines.length; i++)
-            context.fillText(lines[i], x, eixoY	 + (i*lineheight) );
-			
-			if (baixar == true) {		
-				document.getElementById('download').click();
-			}
+              var canvas = document.getElementById(idCanvas);
+              var context = canvas.getContext('2d');
+              var x = canvas.width / 2;
+              var y = canvas.height / 2;
+              
+              var imageObj = new Image();
+              imageObj.crossOrigin = "anonymous"; 
+              imageObj.src =  "imagens/" + document.getElementById('imagemSelecionada').value + '.png';
+
+              imageObj.onload = function() {
+                context.drawImage(imageObj, 0, 0, tamanho, tamanho);
+                context.font = document.getElementById('negrito').value == "s" ? ("bold " + fonte + "px Garamond") : (fonte + "px Garamond");
+                context.textAlign = "center";
+                
+                var txt = document.getElementById('texto').value;
+                var lineheight = tamanhoLinha;
+                var lines = txt.split('\n');
+                
+                var eixoY = y - (((lines.length / 2 ) - 1) * lineheight);
+
+                for (var i = 0; i<lines.length; i++)
+                  context.fillText(lines[i], x, eixoY	 + (i*lineheight) );
+            
+                  if (baixar == true) {		
+                    document.getElementById('download').click();
+                  }
+              };
+          }          
         };
-
-      };
 
     </script>
   </body>
