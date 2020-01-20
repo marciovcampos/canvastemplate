@@ -9,18 +9,39 @@
   <body id='body' style='margin:40px;'>
     <div class="container">
         <form>
-            <div class="form-group">
-              <label for="">Selecione a cor da imagem:</label>
-              <select class="form-control"  id='imagemSelecionada' onchange="gerarCanvas('idCanvas', false)">
-                <option value="roxo" selected>Roxo</option>
-                <option value="amarelo">Amarelo</option>
-                <option value="amarelo-orientacao-profissional">Amarelo Orientação Profissional</option>
-                <option value="azul">Azul</option>
-                <option value="cinza-claro">Cinza Claro</option>
-                <option value="cinza-escuro">Cinza Escuro</option>
-                <option value="verde">Verde</option>
-                <option value="vermelho">Vermelho</option>
-              </select>
+            <div class='row'>
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+					  <label for="">Selecione a cor da imagem:</label>
+					  <select class="form-control"  id='imagemSelecionada' onchange="gerarCanvas('idCanvas', false)">
+						<option value="roxo" selected>Roxo</option>
+						<option value="amarelo-pastel">Amarelo Pastel</option>
+						<option value="amarelo">Amarelo</option>
+						<option value="amarelo-orientacao-profissional">Amarelo Orientação Profissional</option>
+						<option value="azul">Azul</option>
+						<option value="cinza-claro">Cinza Claro</option>
+						<option value="cinza-escuro">Cinza Escuro</option>
+						<option value="verde">Verde</option>
+						<option value="vermelho">Vermelho</option>
+					  </select>
+					</div>
+				</div>
+			  <div class="col-md-6 col-sm-12">
+				  <div class="form-group">
+					  <label for="">Fonte:</label>
+					  <select class="form-control"  id='fonte' onchange="gerarCanvas('idCanvas', false)">
+						  <option value="Garamond" selected>Garamond</option>
+						  <option value="Arial">Arial</option>
+						  <option value="Times New Roman">Times New Roman</option>
+						  <option value="Georgia">Georgia</option>
+						  <option value="Verdana">Verdana</option>
+						  <option value="Lucida Console">Lucida Console</option>
+						  <option value="Roboto">Roboto</option>
+						  <option value="Comic Sans MS">Comic Sans MS</option>
+						  <option value="Palatino">Palatino</option>		  						  
+						</select>
+				  </div>
+			  </div>
             </div>
             <div class='row'>
               <div class="col-md-6 col-sm-12">
@@ -56,7 +77,8 @@
 
     <script>
       let tamanhoMiniatura = 400;
-      let tamanhoImagem = 1080
+      let tamanhoImagem = 1080;
+	  let tipoFonte = "Garamond";
 
       document.getElementById('body').onload = function() {
           gerarCanvas('idCanvas', false);
@@ -79,6 +101,7 @@
               let tamanho  = baixar ? tamanhoImagem : tamanhoMiniatura;
               let fonte = baixar ? fonteEscolhida : (fonteEscolhida / (tamanhoImagem / tamanhoMiniatura));
               let tamanhoLinha = fonte;
+			  tipoFonte = document.getElementById('fonte').value;
 
               document.getElementById(idCanvas).style.visibility = "visible"; 
 
@@ -93,7 +116,7 @@
 
               imageObj.onload = function() {
                 context.drawImage(imageObj, 0, 0, tamanho, tamanho);
-                context.font = document.getElementById('negrito').value == "s" ? ("bold " + fonte + "px Garamond") : (fonte + "px Garamond");
+                context.font = document.getElementById('negrito').value == "s" ? ("bold " + fonte + "px " + tipoFonte) : (fonte + "px " + tipoFonte);
                 context.textAlign = "center";
                 
                 var txt = document.getElementById('texto').value;
