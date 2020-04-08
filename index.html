@@ -44,18 +44,28 @@
 			  </div>
             </div>
             <div class='row'>
-              <div class="col-md-6 col-sm-12">
+              <div class="col-md-4 col-sm-12">
                   <div class="form-group">
                       <label for="">Tamanho Fonte:</label>
                       <input class="form-control" type="text" id="tamanhoFonte" value="35" onkeyup="gerarCanvas('idCanvas', false)">        
                   </div>
               </div>
-              <div class="col-md-6 col-sm-12">
+              <div class="col-md-4 col-sm-12">
                   <div class="form-group">
                       <label for="">Negrito:</label>
                       <select class="form-control"  id='negrito' onchange="gerarCanvas('idCanvas', false)">
                           <option value="n" selected>Não</option>
                           <option value="s">Sim</option>
+                        </select>
+                  </div>
+              </div>
+              <div class="col-md-4 col-sm-12">
+                  <div class="form-group">
+                      <label for="">Orientação do texto:</label>
+                      <select class="form-control"  id='orientacaoTexto' onchange="gerarCanvas('idCanvas', false)">
+                          <option value="center" selected>Centro</option>
+                          <option value="left">Esquerda</option>
+                          <option value="right">Direita</option>
                         </select>
                   </div>
               </div>
@@ -79,6 +89,8 @@
       let tamanhoMiniatura = 400;
       let tamanhoImagem = 1080;
 	  let tipoFonte = "Garamond";
+	  let orientacaoTexto = "center";
+	  let posicaoTexto = 0;
 
       document.getElementById('body').onload = function() {
           gerarCanvas('idCanvas', false);
@@ -102,6 +114,7 @@
               let fonte = baixar ? fonteEscolhida : (fonteEscolhida / (tamanhoImagem / tamanhoMiniatura));
               let tamanhoLinha = fonte;
 			  tipoFonte = document.getElementById('fonte').value;
+			  orientacaoTexto = document.getElementById('orientacaoTexto').value;
 
               document.getElementById(idCanvas).style.visibility = "visible"; 
 
@@ -109,6 +122,14 @@
               var context = canvas.getContext('2d');
               var x = canvas.width / 2;
               var y = canvas.height / 2;
+			  
+			  if (orientacaoTexto == "left") {
+				posicaoTexto = 70;
+			  } else if (orientacaoTexto == "right") {
+				posicaoTexto = canvas.width-70;
+			  } else {
+				posicaoTexto = x;
+			  }
               
               var imageObj = new Image();
               imageObj.crossOrigin = "anonymous"; 
@@ -117,7 +138,7 @@
               imageObj.onload = function() {
                 context.drawImage(imageObj, 0, 0, tamanho, tamanho);
                 context.font = document.getElementById('negrito').value == "s" ? ("bold " + fonte + "px " + tipoFonte) : (fonte + "px " + tipoFonte);
-                context.textAlign = "center";
+                context.textAlign = orientacaoTexto;
                 
                 var txt = document.getElementById('texto').value;
                 var lineheight = tamanhoLinha;
@@ -126,7 +147,7 @@
                 var eixoY = y - (((lines.length / 2 ) - 1) * lineheight);
 
                 for (var i = 0; i<lines.length; i++)
-                  context.fillText(lines[i], x, eixoY	 + (i*lineheight) );
+                  context.fillText(lines[i], posicaoTexto, eixoY	 + (i*lineheight) );
             
                   if (baixar == true) {		
                     document.getElementById('download').click();
