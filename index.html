@@ -124,9 +124,9 @@
               var y = canvas.height / 2;
 			  
 			  if (orientacaoTexto == "left") {
-				posicaoTexto = 70;
+				posicaoTexto = baixar ? 150 : 60;
 			  } else if (orientacaoTexto == "right") {
-				posicaoTexto = canvas.width-70;
+				posicaoTexto = baixar ? canvas.width-150 : canvas.width-60;
 			  } else {
 				posicaoTexto = x;
 			  }
