@@ -40,7 +40,7 @@
               <div class="col-md-6 col-sm-12">
                   <div class="form-group">
                       <label for="">Tamanho Fonte:</label>
-                      <input class="form-control" type="text" id="tamanhoFonte" value="100" onkeyup="gerarCanvas('idCanvas', false)">        
+                      <input class="form-control" type="number" id="tamanhoFonte" value="100" onkeyup="gerarCanvas('idCanvas', false)">        
                   </div>
               </div>
               <div class="col-md-6 col-sm-12">
@@ -105,8 +105,11 @@
       }
 
       diasPadrao = function(el) {
-        document.getElementById("totalDias").value = "30";
-        document.getElementById("recordeDias").value = "30";
+        const diffTime = Math.abs(new Date() - new Date('03/29/2020'));
+        const diasPadrao = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+
+        document.getElementById("totalDias").value = diasPadrao;
+        document.getElementById("recordeDias").value = diasPadrao;
       }
 
       gerarCanvas = function(idCanvas, baixar) {   
