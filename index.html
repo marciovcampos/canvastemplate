@@ -23,11 +23,11 @@
 				  <div class="form-group">
 					  <label for="">Fonte:</label>
 					  <select class="form-control"  id='fonte' onchange="gerarCanvas('idCanvas', false)">
-						  <option value="Garamond" selected>Garamond</option>
+						  <option value="Garamond">Garamond</option>
 						  <option value="Arial">Arial</option>
 						  <option value="Times New Roman">Times New Roman</option>
 						  <option value="Georgia">Georgia</option>
-						  <option value="Verdana">Verdana</option>
+						  <option value="Verdana" selected>Verdana</option>
 						  <option value="Lucida Console">Lucida Console</option>
 						  <option value="Roboto">Roboto</option>
 						  <option value="Comic Sans MS">Comic Sans MS</option>
@@ -40,15 +40,15 @@
               <div class="col-md-4 col-sm-12">
                   <div class="form-group">
                       <label for="">Tamanho Fonte:</label>
-                      <input class="form-control" type="text" id="tamanhoFonte" value="35" onkeyup="gerarCanvas('idCanvas', false)">        
+                      <input class="form-control" type="text" id="tamanhoFonte" value="100" onkeyup="gerarCanvas('idCanvas', false)">        
                   </div>
               </div>
               <div class="col-md-4 col-sm-12">
                   <div class="form-group">
                       <label for="">Negrito:</label>
                       <select class="form-control"  id='negrito' onchange="gerarCanvas('idCanvas', false)">
-                          <option value="n" selected>Não</option>
-                          <option value="s">Sim</option>
+                          <option value="s" selected>Sim</option>
+                          <option value="n">Não</option>
                         </select>
                   </div>
               </div>
@@ -154,9 +154,10 @@
               imageObj.onload = function() {
                 context.drawImage(imageObj, 0, 0, tamanho, tamanho);
                 context.font = document.getElementById('negrito').value == "s" ? ("bold " + fonte + "px " + tipoFonte) : (fonte + "px " + tipoFonte);
+                context.fillStyle = "white";
                 context.textAlign = orientacaoTexto;
                 
-                var txt = document.getElementById('texto').value;
+                var txt = document.getElementById('totalDias').value;
                 var lineheight = tamanhoLinha;
                 var lines = txt.split('\n');
                 
