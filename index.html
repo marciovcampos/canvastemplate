@@ -37,28 +37,18 @@
 			  </div>
             </div>
             <div class='row'>
-              <div class="col-md-4 col-sm-12">
+              <div class="col-md-6 col-sm-12">
                   <div class="form-group">
                       <label for="">Tamanho Fonte:</label>
                       <input class="form-control" type="text" id="tamanhoFonte" value="100" onkeyup="gerarCanvas('idCanvas', false)">        
                   </div>
               </div>
-              <div class="col-md-4 col-sm-12">
+              <div class="col-md-6 col-sm-12">
                   <div class="form-group">
                       <label for="">Negrito:</label>
                       <select class="form-control"  id='negrito' onchange="gerarCanvas('idCanvas', false)">
                           <option value="s" selected>Sim</option>
                           <option value="n">Não</option>
-                        </select>
-                  </div>
-              </div>
-              <div class="col-md-4 col-sm-12">
-                  <div class="form-group">
-                      <label for="">Orientação do texto:</label>
-                      <select class="form-control"  id='orientacaoTexto' onchange="gerarCanvas('idCanvas', false)">
-                          <option value="center" selected>Centro</option>
-                          <option value="left">Esquerda</option>
-                          <option value="right">Direita</option>
                         </select>
                   </div>
               </div>
@@ -68,21 +58,17 @@
               <div class="col-md-6 col-sm-12">
                   <div class="form-group">
                       <label for="">Total de Dias:</label>
-                      <input class="form-control" type="number" id="totalDias" value="" onkeyup="gerarCanvas('idCanvas', false)">        
+                      <input class="form-control" type="number" id="totalDias" value="" onkeyup="gerarCanvas('idCanvas', false)" oninput="gerarCanvas('idCanvas', false)">        
                   </div>
               </div>
               <div class="col-md-6 col-sm-12">
                 <div class="form-group">
                     <label for="">Recorde:</label>
-                    <input class="form-control" type="number" id="recordeDias" value="" onkeyup="gerarCanvas('idCanvas', false)">        
+                    <input class="form-control" type="number" id="recordeDias" value="" onkeyup="gerarCanvas('idCanvas', false)" oninput="gerarCanvas('idCanvas', false)">        
                 </div>
               </div>
             </div>
-
-            <div class="form-group">
-                <label for="">Texto para inserir na imagem:</label>
-                <textarea class="form-control" id='texto' style='font-size:16;padding:2px;' onkeyup="gerarCanvas('idCanvas', false)" rows="10" placeholder='Texto para inserir na imagem' ></textarea>        
-            </div>         
+                    
             <div class="form-group text-center">
                 <button class="btn btn-primary" tyle="font-size: 20px;margin-top:20px;margin-bottom:20px;" onclick="iniciarDownload();">Download</button>
 				        <a id="download" download="imagem.png" href="" style="display:none;" onclick="download_img(this);">Download</a>
@@ -98,8 +84,8 @@
       let tamanhoMiniatura = 400;
       let tamanhoImagem = 1080;
 	  let tipoFonte = "Garamond";
-	  let orientacaoTexto = "center";
-	  let posicaoTexto = 0;
+    let posicaoTextoTotalDias = 0;
+    let posicaoTextoRecordeDias = 0;
 
       document.getElementById('body').onload = function() {
           gerarCanvas('idCanvas', false);
@@ -130,7 +116,6 @@
               let fonte = baixar ? fonteEscolhida : (fonteEscolhida / (tamanhoImagem / tamanhoMiniatura));
               let tamanhoLinha = fonte;
 			  tipoFonte = document.getElementById('fonte').value;
-			  orientacaoTexto = document.getElementById('orientacaoTexto').value;
 
               document.getElementById(idCanvas).style.visibility = "visible"; 
 
@@ -138,15 +123,6 @@
               var context = canvas.getContext('2d');
               var x = canvas.width / 2;
               var y = canvas.height / 2;
-			  
-			  if (orientacaoTexto == "left") {
-				posicaoTexto = baixar ? 150 : 60;
-			  } else if (orientacaoTexto == "right") {
-				posicaoTexto = baixar ? canvas.width-150 : canvas.width-60;
-			  } else {
-				posicaoTexto = x;
-			  }
-              
               var imageObj = new Image();
               imageObj.crossOrigin = "anonymous"; 
               imageObj.src =  "imagens/" + document.getElementById('imagemSelecionada').value + '.png';
@@ -155,20 +131,18 @@
                 context.drawImage(imageObj, 0, 0, tamanho, tamanho);
                 context.font = document.getElementById('negrito').value == "s" ? ("bold " + fonte + "px " + tipoFonte) : (fonte + "px " + tipoFonte);
                 context.fillStyle = "white";
-                context.textAlign = orientacaoTexto;
-                
-                var txt = document.getElementById('totalDias').value;
-                var lineheight = tamanhoLinha;
-                var lines = txt.split('\n');
-                
-                var eixoY = y - (((lines.length / 2 ) - 1) * lineheight);
+                context.textAlign = "center";
 
-                for (var i = 0; i<lines.length; i++)
-                  context.fillText(lines[i], posicaoTexto, eixoY	 + (i*lineheight) );
-            
-                  if (baixar == true) {		
-                    document.getElementById('download').click();
-                  }
+                var txtTotalDias = document.getElementById('totalDias').value;
+                context.fillText(txtTotalDias, 250, 40	 + tamanhoLinha); 
+
+                var txtRecordeDias = document.getElementById('recordeDias').value;
+                context.fillText(txtRecordeDias, 153, 205	 + tamanhoLinha);   
+                
+                if (baixar == true) {		
+                  document.getElementById('download').click();
+                }
+
               };
           }          
         };
