@@ -63,6 +63,22 @@
                   </div>
               </div>
             </div>
+
+            <div class='row'>
+              <div class="col-md-6 col-sm-12">
+                  <div class="form-group">
+                      <label for="">Total de Dias:</label>
+                      <input class="form-control" type="number" id="totalDias" value="" onkeyup="gerarCanvas('idCanvas', false)">        
+                  </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label for="">Recorde:</label>
+                    <input class="form-control" type="number" id="recordeDias" value="" onkeyup="gerarCanvas('idCanvas', false)">        
+                </div>
+              </div>
+            </div>
+
             <div class="form-group">
                 <label for="">Texto para inserir na imagem:</label>
                 <textarea class="form-control" id='texto' style='font-size:16;padding:2px;' onkeyup="gerarCanvas('idCanvas', false)" rows="10" placeholder='Texto para inserir na imagem' ></textarea>        
@@ -87,10 +103,12 @@
 
       document.getElementById('body').onload = function() {
           gerarCanvas('idCanvas', false);
+          diasPadrao();
       }
 
       iniciarDownload = function() {
           gerarCanvas('idCanvasDownload', true);
+          
       }
       
       download_img = function(el) {
@@ -98,6 +116,11 @@
           var image = canvas.toDataURL("image/png");
           el.href = image;
           document.getElementById('idCanvasDownload').style.visibility = "hidden";
+      }
+
+      diasPadrao = function(el) {
+        document.getElementById("totalDias").value = "30";
+        document.getElementById("recordeDias").value = "30";
       }
 
       gerarCanvas = function(idCanvas, baixar) {   
